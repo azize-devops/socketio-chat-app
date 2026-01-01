@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Room</title>
+  <script src="/socket.io/socket.io.js"></script> <!-- Socket.IO kütüphanesini dahil et -->
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .chat-box { width: 300px; height: 400px; border: 1px solid #ccc; overflow-y: scroll; }
+    .message { padding: 5px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>Chat Room</h1>
+
+  <div id="chatBox" class="chat-box"></div> <!-- Sohbet kutusu -->
+  <input id="username" type="text" placeholder="Enter username"> <!-- Kullanıcı adı girişi -->
+  <input id="message" type="text" placeholder="Enter message"> <!-- Mesaj girişi -->
+  <button id="sendMessage">Send</button> <!-- Mesaj gönderme butonu -->
+
+  <script>
+    const socket = io(); // Socket.IO istemcisini başlat
+
+    // Kullanıcı adı ayarlama
+    document.getElementById('username').addEventListener('change', (e) => {
+      socket.emit('set username', e.target.value); // Kullanıcı adı sunucuya gönderiliyor
+    });
+
+    // Mesaj gönderme
+    document.getElementById('sendMessage').addEventListener('click', () => {
+      const message = document.getElementById('message').value; // Mesajı al
+      socket.emit('chat message', message); // Mesajı sunucuya gönder
+    });
+
+    // Mesajları almak ve ekranda göstermek
+    socket.on('chat message', (data) => {
+      const chatBox = document.getElementById('chatBox');
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message');
+      messageElement.innerHTML = `<span style="color:${data.color};">${data.username}:</span> ${data.message}`;
+      chatBox.appendChild(messageElement);  // Mesajı sohbet kutusuna ekle
+      chatBox.scrollTop = chatBox.scrollHeight;  // En son mesaja kaydır
+    });
+
+    // Kullanıcı bilgilerini almak
+    socket.on('user info', (data) => {
+      console.log('User info:', data);  // Kullanıcı bilgilerini konsola yazdır
+    });
+  </script>
+
+</body>
+</html>
+
+
+      
