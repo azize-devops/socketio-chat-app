@@ -68,4 +68,5 @@ Katkılarınız memnuniyetle karşılanır! Hata bildirimleri, özellik istekler
 
 ## Geliştiriciler
 
-*   <Azize_Dursun> (yahusgame)
+*   <Azize_Dursun> (azize-devops)
+
